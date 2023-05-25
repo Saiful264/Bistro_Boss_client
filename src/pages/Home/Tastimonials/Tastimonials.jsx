@@ -15,7 +15,7 @@ const Tastimonials = () => {
 //   const [rating, setRating] = useState(0);
 
   useEffect(() => {
-    fetch("../../../../public/reviews.json")
+    fetch("http://localhost:5000/reviews")
       .then((res) => res.json())
       .then((data) => setRevirews(data));
   }, []);

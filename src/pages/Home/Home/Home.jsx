@@ -6,18 +6,18 @@ import PopularMenu from "../PopularMenu/PopularMenu";
 import Tastimonials from "../Tastimonials/Tastimonials";
 
 const Home = () => {
-    return (
-        <div>
-            <Helmet>
+  return (
+    <div>
+      <Helmet>
         <title>Bistro Boss | Home</title>
       </Helmet>
-            <Banner/>
-            <Category/>
-            <PopularMenu/>
-            <Featured/>
-            <Tastimonials/>
-        </div>
-    );
+      <Banner />
+      <Category />
+      <PopularMenu />
+      <Featured />
+      <Tastimonials />
+    </div>
+  );
 };
 
 export default Home;

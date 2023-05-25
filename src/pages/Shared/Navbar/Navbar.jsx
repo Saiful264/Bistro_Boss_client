@@ -3,13 +3,9 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const navOption = (
     <>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-
-      <li>
-        <Link to="/menu">Menu</Link>
-      </li>
+      <li><Link to="/">Home</Link></li>
+      <li><Link to="/menu">Menu</Link></li>
+      <li><Link to="/order/salad">Order Food</Link></li>
     </>
   );
 
@@ -38,15 +34,13 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
-                {navOption}
+              {navOption}
             </ul>
           </div>
           <a className="btn btn-ghost normal-case text-xl">Bistro Boss</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-          {navOption}
-          </ul>
+          <ul className="menu menu-horizontal px-1">{navOption}</ul>
         </div>
         <div className="navbar-end">
           <a className="btn">Get started</a>
