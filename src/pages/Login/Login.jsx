@@ -1,10 +1,12 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
+import { useContext, useEffect, useState } from 'react';
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../providers/AuthProviders';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 
 const Login = () => {
-    const capchatRef = useRef(null);
     const [disable, setDisable] = useState(true);
 
     const {signIn} = useContext(AuthContext);
@@ -25,19 +27,31 @@ const Login = () => {
         .then((result)=>{
           const user = result.user;
           console.log(user);
+          Swal.fire({
+            title: 'User Login Successful.',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
         })
-
     }
 
 
-    const handleValidateCapcha = () =>{
-        const user_captcha_value = capchatRef.current.value;
+    const handleValidateCapcha = (e) =>{
+        const user_captcha_value = e.target.value;
         if(validateCaptcha(user_captcha_value) === true){
             setDisable(false);
         }
     }
 
   return (
+      <>
+       <Helmet>
+        <title>Bistro Boss | Login</title>
+      </Helmet>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse"> 
           <div className="text-center w-1/2 lg:text-left">
@@ -83,20 +97,21 @@ const Login = () => {
                 </label>
                 <input
                   type="text"
-                  ref={capchatRef}
+                  onBlur={handleValidateCapcha}
                   name="captcha"
                   placeholder="type the text above"
                   className="input input-bordered"
                 />
-                <button onClick={handleValidateCapcha} className="btn btn-xs btn-info mt-2">Info</button>
+                <button  className="btn btn-xs btn-info mt-2">Info</button>
               </div>
               <div className="form-control mt-6">
                 <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
               </div>
             </form>
+            <p><small>New Here? <Link to="/signup">Create an account</Link> </small></p>
           </div>
         </div>
-      </div>
+      </div></>
   );
 };
 
