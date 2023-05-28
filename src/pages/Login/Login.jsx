@@ -1,59 +1,66 @@
-import { useContext, useEffect, useState } from 'react';
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import { AuthContext } from '../../providers/AuthProviders';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
-import Swal from 'sweetalert2';
-
+import { useContext, useEffect, useState } from "react";
+import {
+  loadCaptchaEnginge,
+  LoadCanvasTemplate,
+  validateCaptcha,
+} from "react-simple-captcha";
+import { AuthContext } from "../../providers/AuthProviders";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import Swal from "sweetalert2";
 
 const Login = () => {
-    const [disable, setDisable] = useState(true);
+  const [disabled, setDisabled] = useState(true);
+  const naviaget = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.pathname || "/";
 
-    const {signIn} = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
-    useEffect(()=>{
-        loadCaptchaEnginge(6);
-    },[])
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []);
 
-    const handlerLogin = event =>{
-        event.preventDefault();
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
+  const handlerLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
 
-        console.log( "email",email, "password",password);
+    console.log("email", email, "password", password);
 
-        signIn(email, password)
-        .then((result)=>{
-          const user = result.user;
-          console.log(user);
-          Swal.fire({
-            title: 'User Login Successful.',
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-            }
-        });
-        })
+    signIn(email, password).then((result) => {
+      const user = result.user;
+      console.log(user);
+      Swal.fire({
+        title: "User Login Successful.",
+        showClass: {
+          popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOutUp",
+        },
+      });
+      naviaget(from, { replace: true });
+    });
+  };
+
+  const handleValidateCaptcha = (e) => {
+    const user_captcha_value = e.target.value;
+    if (validateCaptcha(user_captcha_value)) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
     }
-
-
-    const handleValidateCapcha = (e) =>{
-        const user_captcha_value = e.target.value;
-        if(validateCaptcha(user_captcha_value) === true){
-            setDisable(false);
-        }
-    }
+  };
 
   return (
-      <>
-       <Helmet>
+    <>
+      <Helmet>
         <title>Bistro Boss | Login</title>
       </Helmet>
       <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row-reverse"> 
+        <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center w-1/2 lg:text-left">
             <h1 className="text-5xl font-bold">Login now!</h1>
             <p className="py-6">
@@ -93,25 +100,34 @@ const Login = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                <LoadCanvasTemplate />
+                  <LoadCanvasTemplate />
                 </label>
                 <input
+                  onBlur={handleValidateCaptcha}
                   type="text"
-                  onBlur={handleValidateCapcha}
                   name="captcha"
-                  placeholder="type the text above"
+                  placeholder="type the captcha above"
                   className="input input-bordered"
                 />
-                <button  className="btn btn-xs btn-info mt-2">Info</button>
               </div>
               <div className="form-control mt-6">
-                <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
+                <input
+                  disabled={false}
+                  className="btn btn-primary"
+                  type="submit"
+                  value="Login"
+                />
               </div>
             </form>
-            <p><small>New Here? <Link to="/signup">Create an account</Link> </small></p>
+            <p>
+              <small>
+                New Here? <Link to="/signup">Create an account</Link>{" "}
+              </small>
+            </p>
           </div>
         </div>
-      </div></>
+      </div>
+    </>
   );
 };
 
