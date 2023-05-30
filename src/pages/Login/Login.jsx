@@ -8,10 +8,11 @@ import { AuthContext } from "../../providers/AuthProviders";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const Login = () => {
   const [disabled, setDisabled] = useState(true);
-  const naviaget = useNavigate();
+  const naviagete = useNavigate();
   const location = useLocation();
   const from = location?.state?.pathname || "/";
 
@@ -41,7 +42,7 @@ const Login = () => {
           popup: "animate__animated animate__fadeOutUp",
         },
       });
-      naviaget(from, { replace: true });
+      naviagete(from, { replace: true });
     });
   };
 
@@ -124,6 +125,7 @@ const Login = () => {
                 New Here? <Link to="/singup">Create an account</Link>{" "}
               </small>
             </p>
+            <SocialLogin/>
           </div>
         </div>
       </div>

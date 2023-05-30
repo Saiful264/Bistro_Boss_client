@@ -1,29 +1,60 @@
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProviders";
+import Swal from "sweetalert2";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const SingIn = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const {createUser} = useContext(AuthContext)
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const naviagete = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.pathname || "/";
 
   const onSubmit = (data) => {
     console.log(data);
-    createUser(data.email, data.password)
-    .then(result=> {
-        const logedUser = result.user;
-        console.log(logedUser);
-    })
+    createUser(data.email, data.password).then((result) => {
+      const logedUser = result.user;
+      console.log(logedUser);
+      updateUserProfile(data.name, data.photoURL)
+        .then(() => {
+          const saveUser = { name: data.name, email: data.email };
+          fetch("http://localhost:5000/users", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(saveUser),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.insertedId) {
+                reset();
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "User created successfully.",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                naviagete(from, { replace: true });
+              }
+            });
+        })
+        .catch((error) => console.log(error));
+    });
   };
 
-  console.log(watch("example"));
+  // console.log(watch("example"));
 
   return (
     <>
@@ -57,6 +88,20 @@ const SingIn = () => {
                 />
                 {errors.name && (
                   <span className="text-red-700">This field is required</span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Photo URL</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("photoURL", { required: true })}
+                  placeholder="Photo URL"
+                  className="input input-bordered"
+                />
+                {errors.photoURL && (
+                  <span className="text-red-600">Photo URL is required</span>
                 )}
               </div>
               <div className="form-control">
@@ -127,6 +172,7 @@ const SingIn = () => {
               <small>New Here?</small>
               <Link to="/singup">create an account</Link>
             </p>
+            <SocialLogin/>
           </div>
         </div>
       </div>
