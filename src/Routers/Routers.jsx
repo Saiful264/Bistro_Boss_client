@@ -4,9 +4,11 @@ import Home from "../pages/Home/Home/Home";
 import Menu from "../pages/Menu/Menu/menu";
 import Order from "../pages/Order/Order/Order";
 import Login from "../pages/Login/Login";
-import SingIn from "../pages/SingIn/SingIn";
 import PrivateRoute from "./PrivateRoute";
 import Secret from "../pages/Shared/Secret/Secret";
+import Dashboard from "../Layout/Dashboard";
+import MyCart from "../pages/Dashboard/MyCart/MyCart";
+import SingIn from "../pages/SingIn/SingIn";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +39,16 @@ const router = createBrowserRouter([
                 path: 'secret',
                 element: <PrivateRoute><Secret></Secret></PrivateRoute>
               }
+        ]
+    },
+    {
+        path: "/dashboard",
+        element: <PrivateRoute><Dashboard/></PrivateRoute>,
+        children: [
+            {
+                path: "mycart",
+                element: <MyCart/>
+            }
         ]
     }
 ]);
