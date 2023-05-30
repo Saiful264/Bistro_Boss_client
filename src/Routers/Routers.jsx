@@ -9,6 +9,7 @@ import Secret from "../pages/Shared/Secret/Secret";
 import Dashboard from "../Layout/Dashboard";
 import MyCart from "../pages/Dashboard/MyCart/MyCart";
 import SingIn from "../pages/SingIn/SingIn";
+import AllUser from "../pages/Dashboard/AllUser/AllUser";
 
 const router = createBrowserRouter([
     {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
             {
                 path: "mycart",
                 element: <MyCart/>
+            },
+            {
+                path: "alluser",
+                element: <AllUser/>
             }
         ]
     }
