@@ -20,7 +20,7 @@ const Tastimonials = () => {
       .then((data) => setRevirews(data));
   }, []);
 
-  console.log(reviews);
+  // console.log(reviews);
   return (
     <section>
       <SectionTilte subHadding="What Our Clients Say" headding="TESTIMONIALS" />

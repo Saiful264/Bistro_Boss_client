@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 
 const MyCart = () => {
   const [cart, refetch] = useCart();
+
+  console.log("cart",cart);
   
     // how does reduce work !!!
   const total = cart.reduce((sum, item) => item.price + sum, 0);
